@@ -1,10 +1,18 @@
 package com.luxoft.ubs.restfacade.entity;
 
-import org.springframework.data.jpa.domain.AbstractPersistable;
 import org.springframework.util.Assert;
 
-public class Movie extends AbstractPersistable<Long> {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import java.util.Objects;
 
+@Entity
+public class Movie {
+
+    @Id
+    @GeneratedValue
+    private long id;
     private String title;
     private String description;
 
@@ -17,6 +25,25 @@ public class Movie extends AbstractPersistable<Long> {
     }
 
     protected Movie() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Movie)) return false;
+        Movie movie = (Movie) o;
+        return getId() == movie.getId() &&
+                Objects.equals(getTitle(), movie.getTitle()) &&
+                Objects.equals(getDescription(), movie.getDescription());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {
