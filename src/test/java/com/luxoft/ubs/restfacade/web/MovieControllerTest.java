@@ -57,7 +57,7 @@ public class MovieControllerTest {
         Comment comment2 = new Comment("user1", "This is 2nd scene to watch", retrievedMovie.getId());
 
         CompletableFuture<Comment> commentCompletableFuture1 = commentService.addComment(comment1);
-        CompletableFuture<Comment> commentCompletableFuture2 = commentService.addComment(comment1);
+        CompletableFuture<Comment> commentCompletableFuture2 = commentService.addComment(comment2);
         Comment retrievedComment1 = commentCompletableFuture1.get();
         Comment retrievedComment2 = commentCompletableFuture2.get();
 
