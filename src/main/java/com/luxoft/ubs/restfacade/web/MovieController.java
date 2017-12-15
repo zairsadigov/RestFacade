@@ -33,7 +33,7 @@ public class MovieController {
         this.commentService = commentService;
     }
 
-    @GetMapping(path = "/{id:\\d+}")
+    @GetMapping(path = "/movie/{id:\\d+}")
     public ResponseEntity<MovieAndComments> getMovieAndCommentsByMovieId(@PathVariable Long id) throws ExecutionException, InterruptedException {
         CompletableFuture<Movie> completableFuture = movieService.getMovieById(id);
         CompletableFuture<Collection<Comment>> collectionCompletableFuture = commentService.getCommentsByMovieId(id);

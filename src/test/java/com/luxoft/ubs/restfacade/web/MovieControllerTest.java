@@ -65,7 +65,7 @@ public class MovieControllerTest {
         Comment retrievedComment1 = commentCompletableFuture1.get();
         Comment retrievedComment2 = commentCompletableFuture2.get();
 
-        mockMvc.perform(get("/" + retrievedMovie.getId()))
+        mockMvc.perform(get("/movie/" + retrievedMovie.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"movie\":{\"id\":" +
                         retrievedMovie.getId() +
