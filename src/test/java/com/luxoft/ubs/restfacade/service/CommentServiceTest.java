@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -31,6 +33,7 @@ public class CommentServiceTest {
 
     @Test
     @Rollback
+    @WithMockUser(roles = "USER")
     public void addsCommentAndRetrievesToCompare() throws Exception {
         CompletableFuture<Comment> commentCompletableFuture = commentService.addComment(comment);
         Comment comment1 = commentCompletableFuture.get();
@@ -38,22 +41,31 @@ public class CommentServiceTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    @WithMockUser(roles = "USER")
     public void addsNullAsCommentAndFails() throws Exception {
         commentService.addComment(null);
     }
 
 
     @Test(expected = IllegalArgumentException.class)
+    @WithMockUser(roles = "USER")
     public void getsCommentByNegativeMovieIdAndFails() throws Exception {
         commentService.getCommentsByMovieId(-1);
     }
 
     @Test
     @Rollback
+    @WithMockUser(roles = "USER")
     public void getsCommentByMovieId() throws Exception {
         commentService.addComment(comment);
         CompletableFuture<Collection<Comment>> collectionCompletableFuture = commentService.getCommentsByMovieId(comment.getMovieId());
         Collection<Comment> commentCollection = collectionCompletableFuture.get();
         Assert.assertTrue(commentCollection.size() > 0);
+    }
+
+    @Test(expected = AccessDeniedException.class)
+    @WithMockUser(roles = {"ADMIN", "FAKE"})
+    public void shouldFailAuthorization() throws Exception {
+        commentService.getCommentsByMovieId(1);
     }
 }

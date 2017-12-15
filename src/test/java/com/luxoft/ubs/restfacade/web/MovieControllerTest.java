@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -18,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.util.concurrent.CompletableFuture;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,6 +44,7 @@ public class MovieControllerTest {
     public void setUp() throws Exception {
         this.mockMvc = MockMvcBuilders
                 .webAppContextSetup(webApplicationContext)
+                .apply(springSecurity())
                 .build();
 
         this.movie = new Movie("Test Movie Title", "Test movie description");
@@ -49,6 +52,7 @@ public class MovieControllerTest {
 
     @Test
     @Rollback
+    @WithMockUser(roles = {"ADMIN", "USER"})
     public void getMovieAndCommentsByMovieId() throws Exception {
         CompletableFuture<Movie> completableFuture = movieService.addMovie(movie);
         Movie retrievedMovie = completableFuture.get();

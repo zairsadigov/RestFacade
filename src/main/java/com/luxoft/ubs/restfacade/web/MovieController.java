@@ -5,6 +5,7 @@ import com.luxoft.ubs.restfacade.entity.Movie;
 import com.luxoft.ubs.restfacade.service.CommentService;
 import com.luxoft.ubs.restfacade.service.MovieService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
